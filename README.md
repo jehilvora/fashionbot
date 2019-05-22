@@ -11,6 +11,8 @@
 
 ## Steps to use project
 1. Create models using the train.py and train_pattern.py ( Do not change model or labelbin names, dataset path can be changed)
-..1. python ML/train.py -d dataset -m color_apparel.model -lb color_labels.lb -p plot_color_apparel.png
-..2. python ML/train.py -d dataset -m color_apparel.model -lb color_labels.lb -p plot_pattern.png
+⋅⋅1. python ML/train.py -d dataset -m color_apparel.model -lb color_labels.lb -p plot_color_apparel.png
+⋅⋅2. python ML/train.py -d dataset -m color_apparel.model -lb color_labels.lb -p plot_pattern.png
 2. Start the flask application by running "python app.py"
+
+###[Link to datasets and models](https://drive.google.com/open?id=1imaiT9bOS0y4G5v2Xi_oawg5UrIbjbVT)
