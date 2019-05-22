@@ -15,4 +15,4 @@
 ⋅⋅2. python ML/train.py -d dataset -m color_apparel.model -lb color_labels.lb -p plot_pattern.png
 2. Start the flask application by running "python app.py"
 
-###[Link to datasets and models](https://drive.google.com/open?id=1imaiT9bOS0y4G5v2Xi_oawg5UrIbjbVT)
+### [Link to datasets and models](https://drive.google.com/open?id=1imaiT9bOS0y4G5v2Xi_oawg5UrIbjbVT)
