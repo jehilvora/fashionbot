@@ -13,10 +13,10 @@ import json
 
 # load the trained convolutional neural network and the multi-label
 # binarizer
-MODEL_NAME_COLOR = "color_apparel.model"
-LABEL_BIN_COLOR = "color_labels.lb"
-MODEL_NAME_PATTERN = "pattern.model"
-LABEL_BIN_PATTERN = "pat_labels.lb"
+MODEL_NAME_COLOR = "ML/color_apparel.model"
+LABEL_BIN_COLOR = "ML/color_labels.lb"
+MODEL_NAME_PATTERN = "ML/pattern.model"
+LABEL_BIN_PATTERN = "ML/pat_labels.lb"
 model_color = load_model(MODEL_NAME_COLOR)
 mlb_color = pickle.loads(open(LABEL_BIN_COLOR, "rb").read())
 model_pattern = load_model(MODEL_NAME_PATTERN)
