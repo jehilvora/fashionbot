@@ -27,7 +27,7 @@ def giveLabelPredictions(image, classify_model):
 	# load the image
 	image = cv2.imread(image)
 	output = imutils.resize(image, width=400)
-	predictions = {}
+	predictions = []
 	
 	# pre-process the image for classification
 	image = cv2.resize(image, (96, 96))
@@ -48,6 +48,6 @@ def giveLabelPredictions(image, classify_model):
 
 		# show the probabilities for each of the individual labels
 		for (label, p) in zip(mlb.classes_, proba):
-			predictions[label] = "{:.2f}%".format(p * 100)
+			predictions.append((label,p))
 			
 		return predictions

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <img style="display: block; margin-left: auto; margin-right: auto; width: 500px; height:500px;" id="currImg" src="/static/dataset/{{ src }}" alt="{{ imgId }}">
+
+    <div style="display: block; margin-left: auto; margin-right: auto; width: 500px; height:30px;">
+      <button style="display: inline; width: 200px; height: 30px; margin: 20px;" class="btn"><i class="fa fa-thumbs-up" onclick="adjustRecommendation(1)"></i></button>
+      <button style="display: inline; width: 200px; height: 30px; margin: 20px;;" class="btn"><i class="fa fa-thumbs-down" onclick="adjustRecommendation(-1)"></i></button>
+    </div>
+    <script>
+    function adjustRecommendation(adjVal) {
+        var imgRef = document.getElementById("currImg");
+        var id = imgRef.getAttribute("alt");
+        var http = new XMLHttpRequest();
+        var url = '/update_recomm';
+        var params = 'imgId='+id+'&adjVal='+adjVal;
+        http.open('GET', url, true);
+
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+              result = JSON.parse(http.responseText);
+              imgRef.alt = result[0];
+              imgRef.src = '/static/dataset/' + result[1];
+            }
+        }
+        http.send(params);
+    }
+    </script>
+  </body>
+</html>
