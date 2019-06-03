@@ -5,7 +5,7 @@ import MySQLdb
 import math
 import os
 
-db=MySQLdb.connect("localhost","root","root1234","fashion")
+db=MySQLdb.connect("localhost","root","root123","fashionbot")
 
 label_dict = {
     "red" : 1,
@@ -47,6 +47,15 @@ def insertQuery(query):
 #               [1, 0, 3, 0, 3, 0, 0, 2, 0, 0, 4, 0]
 #               ]
 
+def calculate_sigmoid(x):
+	return 1/(1+math.exp(-x))
+
+def adjust_matrix(apparel_id, adjust_value, user_id):
+	labels = getAllValues("select label_id from has_labels where apparel_id = '%s'" % id)
+	labels = [label_dict[x[0]] for x in labels]
+	labels = ",".join(labels)
+	insertQuery("update prefers set rating = rating + %d where user_id = '%s' and label_id in (%s)" % (adjust_value, user_id, labels))
+
 def get_recommendations(user_id):
 	data1 = executeQuery("select * from prefers")
 	d = np.zeros(MATRIX_SIZE)
@@ -58,11 +67,14 @@ def get_recommendations(user_id):
 	pref = [] 
 	# To avoid considering zeros as negative ratings
 	df = df.replace(0, np.NaN)
-
+	for i in range(NUM_USERS):
+		for j in range(NUM_APPAREL):
+			df.iloc[i,j] = calculate_sigmoid(df.iloc[i,j])*5
 	# Normalize all values to be centered around 0
 	df = df.sub(df.mean(axis=1), axis=0)
 
 	df = df.replace(np.NaN, 0)
+	print(df)
 
 	cosine_sim_matrix = cosine_similarity(df)
 	num_of_recommendations = 2
@@ -83,7 +95,7 @@ def get_recommendations(user_id):
 
 	pref = sorted(pref, key=lambda x : x[1])
 	pref = pref[-2:]
-	recommendations = executeQuery("select img_path from apparel, has_labels where apparel_id = id and label_id in (%d, %d) limit 5" % (pref[0][1], pref[1][1]))
+	recommendations = executeQuery("select img_path from apparel, has_labels where apparel_id = id and label_id in (%d, %d) order by RAND() limit 5" % (pref[0][1], pref[1][1]))
 	recommendations = ["/".join(x[0].split(os.path.sep)[-2:]) for x in recommendations]
 	return recommendations
 

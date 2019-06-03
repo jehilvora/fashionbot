@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/login.css') }}">
+</head>
+<body>
+
+<!--   <h2>Fashion Bot</h2>
+  {% if request.args.get('sign_up') == "1" %}
+  <form id="signUpForm" method="post" action="/signUpHandler">
+  {% else %}
+  <form method="post" action="/loginHandler">
+  {%endif%} -->
+  <form method="post" action="/login">
+  <div class="container">
+    <label for="username"><b>User Name</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+<!--     {% if request.args.get('sign_up') == "1" %}
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="email"><b>Email ID</b></label>
+    <input type="email" placeholder="Enter Email ID" name="email" required>
+    <br>
+    <br>
+
+    <label for="desc"><b>Little About Yourself</b></label>
+    <br>
+    <textarea name="desc" form="signUpForm" required></textarea>
+    <button type="submit">Create new</button>
+  </div>
+    {% else %}
+ -->    <button type="submit">Login</button>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <span class="signupbtn"><a style="text-decoration: none; color: white; font-family: Arial, sans-serif;" href="/?sign_up=1">Sign Up</a></span>
+  </div>
+<!--   {%endif%}
+ -->
+  {% if messages %}
+  <div class="container">
+    <p style="color: red;">{{messages}}</p>
+  </div>
+  {%endif%}
+</form>
+</body>
+</html>

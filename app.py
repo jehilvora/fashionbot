@@ -1,12 +1,55 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug import secure_filename
 from ML import classify,recommender_system
 from imutils import paths
 import json
 import os
+import MySQLdb
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "static/img/"
+app.secret_key = os.urandom(12)
+
+db=MySQLdb.connect("localhost","root","root123","fashionbot")
+
+def getSingleValue(query):
+   cursor = db.cursor()
+   cursor.execute(query)
+   return cursor.fetchone()
+
+def getAllValues(query):
+   cursor = db.cursor()
+   cursor.execute(query)
+   return cursor.fetchall()
+
+def insertQuery(query):
+   cur = db.cursor()
+   cur.execute(query)
+   db.commit()   
+
+@app.route("/", methods=['GET'])
+def home():
+   messages = request.args.get('messages')
+   #logged_in is the key in session variable for current login status
+   if session.get("logged_in"):
+      return redirect(url_for('wardrobe'))
+   else:
+      return render_template('login.html', messages = messages)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+   if request.method == 'POST':
+      username = request.form['username']
+      psw = request.form['psw']
+      reqPsw = getSingleValue("select password from users where Name = '%s'" % username)
+      user_id = getSingleValue("select id from users where Name = '%s'" % username)
+      if reqPsw != None and psw == reqPsw[0]:
+            session['username'] = username
+            session['logged_in'] = True
+            session['user_ID'] = user_id[0]
+            return redirect(url_for('wardrobe'))
+      else:
+         return render_template('login.html', messages="Wrong username or password")
 
 @app.route('/upload')
 def upload_page():
@@ -29,7 +72,7 @@ def feedback():
 def update_recomm():
    id = request.args.get("imgId")
    val = request.args.get("adjVal")
-   #perform update
+   recommender_system.adjust_matrix(id, val, session['user_ID'])
    result = recommender_system.get_image_for_recommendation()
    return json.dumps(result)
     
