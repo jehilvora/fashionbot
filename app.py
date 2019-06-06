@@ -51,6 +51,11 @@ def login():
       else:
          return render_template('login.html', messages="Wrong username or password")
 
+@app.route('/logout', methods = ['GET'])
+def logout():
+   session['logged_in'] = False
+   return render_template('login.html', messages = "Successfully logged out")
+
 @app.route('/upload')
 def upload_page():
    return render_template('image_upload.html')
@@ -59,9 +64,9 @@ def upload_page():
 def wardrobe():
    return render_template('wardrobe.html', wardrobe = get_wardrobe_items())
 
-@app.route('/recommend/<int:user_id>')
-def recommend(user_id):
-   return render_template('recommendations.html', recs = recommender_system.get_recommendations(user_id))
+@app.route('/recommend/')
+def recommend():
+   return render_template('recommendations.html', recs = recommender_system.get_recommendations(int(session['user_ID'])))
 
 @app.route('/feedback')
 def feedback():

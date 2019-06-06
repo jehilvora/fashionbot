@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends "base_layout.html" %}
+
+{% block content %}
 	{% for path in recs: %}
 		<img style="width:200px;height:200px;" src="/static/dataset/{{path}}">
 	{% endfor %}
-</body>
-</html>
+{% endblock %}
