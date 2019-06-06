@@ -62,7 +62,11 @@ def upload_page():
 
 @app.route('/wardrobe')
 def wardrobe():
-   return render_template('wardrobe.html', wardrobe = get_wardrobe_items())
+   wardrobe = get_wardrobe_items()
+   apparel_labels = {}
+   for row in wardrobe:
+      apparel_labels.setdefault(row[0], []).append(row[1])
+   return render_template('wardrobe.html', apparel_labels = apparel_labels)
 
 @app.route('/recommend/')
 def recommend():
@@ -104,7 +108,9 @@ def get_wardrobe_items():
       username = session['username']
    user_folder = app.config['UPLOAD_FOLDER'] + username
    img_paths = paths.list_images(user_folder)
-   return img_paths
+   img_paths = ",".join(["'"+x+"'" for x in img_paths])
+   data = getAllValues("select img_path,name from apparel a, has_labels h , label l where a.id = apparel_id and label_id = l.id and img_path in (%s)" % img_paths)
+   return data
         
 if __name__ == '__main__':
    app.run(debug = True)
