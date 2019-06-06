@@ -26,8 +26,7 @@
         var imgRef = document.getElementById("currImg");
         var id = imgRef.getAttribute("alt");
         var http = new XMLHttpRequest();
-        var url = '/update_recomm';
-        var params = 'imgId='+id+'&adjVal='+adjVal;
+        var url = '/update_recomm?imgId='+id+'&adjVal='+adjVal;
         http.open('GET', url, true);
 
         //Send the proper header information along with the request
@@ -40,7 +39,7 @@
               imgRef.src = '/static/dataset/' + result[1];
             }
         }
-        http.send(params);
+        http.send();
     }
     </script>
   </body>

@@ -5,7 +5,7 @@ import MySQLdb
 import math
 import os
 
-db=MySQLdb.connect("localhost","root","root123","fashionbot")
+db=MySQLdb.connect("localhost","root","root1234","fashion")
 
 label_dict = {
     "red" : 1,
@@ -50,10 +50,16 @@ def insertQuery(query):
 def calculate_sigmoid(x):
 	return 1/(1+math.exp(-x))
 
+def getAllValues(query):
+    cursor = db.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
 def adjust_matrix(apparel_id, adjust_value, user_id):
-	labels = getAllValues("select label_id from has_labels where apparel_id = '%s'" % id)
-	labels = [label_dict[x[0]] for x in labels]
+	labels = getAllValues("select label_id from has_labels where apparel_id = %d" % apparel_id)
+	labels = [str(x[0]) for x in labels]
 	labels = ",".join(labels)
+	print("update prefers set rating = rating + %d where user_id = '%s' and label_id in (%s)" % (adjust_value, user_id, labels))
 	insertQuery("update prefers set rating = rating + %d where user_id = '%s' and label_id in (%s)" % (adjust_value, user_id, labels))
 
 def get_recommendations(user_id):

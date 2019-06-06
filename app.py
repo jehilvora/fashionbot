@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "static/img/"
 app.secret_key = os.urandom(12)
 
-db=MySQLdb.connect("localhost","root","root123","fashionbot")
+db=MySQLdb.connect("localhost","root","root1234","fashion")
 
 def getSingleValue(query):
    cursor = db.cursor()
@@ -70,9 +70,9 @@ def feedback():
 
 @app.route('/update_recomm', methods = ['GET'])
 def update_recomm():
-   id = request.args.get("imgId")
-   val = request.args.get("adjVal")
-   recommender_system.adjust_matrix(id, val, session['user_ID'])
+   id = int(request.args.get("imgId"))
+   val = int(request.args.get("adjVal"))
+   recommender_system.adjust_matrix(id, val, int(session['user_ID']))
    result = recommender_system.get_image_for_recommendation()
    return json.dumps(result)
     
