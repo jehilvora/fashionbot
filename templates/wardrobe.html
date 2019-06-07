@@ -1,5 +1,4 @@
-{% extends "base_layout.html" %}
-{% block head %}
+{% extends "base_layout.html" %} {% block head %}
 <style>
   .card {
     display: inline-block;
@@ -15,7 +14,7 @@
 
   img {
     border-radius: 5px 5px 0 0;
-    height: 300px;
+    height: 500px;
     cursor: pointer;
     transition: 0.3s;
   }
@@ -47,6 +46,7 @@
     margin: auto;
     display: block;
     width: 80%;
+    height: 80%;
     max-width: 700px;
   }
 
@@ -113,6 +113,31 @@
       width: 100%;
     }
   }
+
+  .btn-group button {
+    background-color: black; /* Green background */
+    border: 1px solid white; /* Green border */
+    color: white; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+  }
+
+  /* Clear floats (clearfix hack) */
+  .btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  .btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+  }
+
+  /* Add a background color on hover */
+  .btn-group button:hover {
+    background-color: #3e8e41;
+  }
 </style>
 {% endblock %} {% block content %}
 <h2>Your Wardrobe</h2>
@@ -121,22 +146,23 @@
   <input type="file" name="file" />
   <input type="submit" />
 </form>
-
-{% for apparel in apparel_labels: %}
-<div class="card">
-  <img
-    id="{{ apparel }}"
-    src="/{{ apparel }}"
-    alt="{{ apparel_labels[apparel] }}"
-    style="width:100%"
-    onclick="showModal(this)"
-  />
-  <div class="container">
-    <h4><b>apparel</b></h4>
-    <p>buttons</p>
+<div>
+  {% for apparel in apparel_labels: %}
+  <div class="card">
+    <img
+      id="{{ apparel }}"
+      src="/{{ apparel }}"
+      alt="{{ apparel_labels[apparel] }}"
+      style="width:100%"
+      onclick="showModal(this)"
+    />
+    <div class="btn-group" style="width: 100%;">
+      <button style="width: 50%;"><a href="/share">Share</a></button>
+      <button style="width: 50%;"><a href="/delete?path={{ apparel }}">Delete</a></button>
+    </div>
   </div>
+  {% endfor %}  
 </div>
-{% endfor %}
 
 <div id="myModal" class="modal">
   <span class="close">&times;</span>

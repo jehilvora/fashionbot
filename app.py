@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug import secure_filename
 from ML import classify,recommender_system
-from imutils import paths
 import json
 import os
 import MySQLdb
@@ -22,7 +21,7 @@ def getAllValues(query):
    cursor.execute(query)
    return cursor.fetchall()
 
-def insertQuery(query):
+def executeNonQuery(query):
    cur = db.cursor()
    cur.execute(query)
    db.commit()   
@@ -56,13 +55,14 @@ def logout():
    session['logged_in'] = False
    return render_template('login.html', messages = "Successfully logged out")
 
-@app.route('/upload')
-def upload_page():
-   return render_template('image_upload.html')
 
 @app.route('/wardrobe')
 def wardrobe():
-   wardrobe = get_wardrobe_items()
+   username = ""
+   if 'username' in session:
+      username = session['username']
+   user_folder = app.config['UPLOAD_FOLDER'] + username
+   wardrobe = recommender_system.get_wardrobe_items(user_folder)
    apparel_labels = {}
    for row in wardrobe:
       apparel_labels.setdefault(row[0], []).append(row[1])
@@ -100,17 +100,13 @@ def upload_file():
       predictions = classify.giveLabelPredictions(final_path, "color") + classify.giveLabelPredictions(final_path, "pattern")
       predictions = [x for x in predictions if x[1] > 0.6]
       recommender_system.add_user_item(final_path, predictions)
-      return redirect('/upload')
+      return redirect('/')
 
-def get_wardrobe_items():
-   username = ""
-   if 'username' in session:
-      username = session['username']
-   user_folder = app.config['UPLOAD_FOLDER'] + username
-   img_paths = paths.list_images(user_folder)
-   img_paths = ",".join(["'"+x+"'" for x in img_paths])
-   data = getAllValues("select img_path,name from apparel a, has_labels h , label l where a.id = apparel_id and label_id = l.id and img_path in (%s)" % img_paths)
-   return data
+@app.route('/delete', methods = ['GET'])
+def deleteImage():
+   path = request.args.get('path')
+   recommender_system.remove_apparel(path)
+   return redirect(url_for('home'))
         
 if __name__ == '__main__':
    app.run(debug = True)

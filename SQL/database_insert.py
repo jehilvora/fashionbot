@@ -21,13 +21,20 @@ label_dict = {
     "orange" : 5,
     "blue" : 6,
     "jeans" : 7,
+    "floral" : 8,
+    "graphic" : 9,
+    "solid" : 10,
+    "plaid" : 11,
+    "spotted" : 12,
+    "striped" : 13,
+    "white" : 14
 }
 
-IMG_DIR = "/Users/i506655/Downloads/datasets/dataset/"
+IMG_DIR = "/Users/i506655/Downloads/Final Year Project/static/dataset"
 imagePaths = list(paths.list_images(IMG_DIR))
 for imagePath in imagePaths:
     print(imagePath)
-    insertQuery("insert into apparel values(0,'%s')" % imagePath)
+    insertQuery("insert into apparel values(0,'%s', 0)" % imagePath)
     img_id = lastInsertedId()
     labels = imagePath.split(os.path.sep)[-2].split("_")
     for l in labels:
