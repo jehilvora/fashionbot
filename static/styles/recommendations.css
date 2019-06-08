@@ -1,0 +1,9 @@
+h1{
+	position: static;
+	color: rgb(1,2,255);
+	text-align: center;
+	font-size: 70px;
+}
+.container {
+    position: relative;
+}

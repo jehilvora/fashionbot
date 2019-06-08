@@ -25,8 +25,6 @@ label_dict = {
     "white" : 14
 }
 
-MATRIX_SIZE = (NUM_USERS, NUM_APPAREL) = (4, 7)
-
 def executeQuery(query):
     cur = db.cursor()
     cur.execute(query)
@@ -36,6 +34,14 @@ def executeNonQuery(query):
     cur = db.cursor()
     cur.execute(query)
     db.commit()
+
+users_count = executeQuery("select count(*) from users")
+labels_count = executeQuery("select count(*) from label")
+for count in users_count:
+	NUM_USERS = count[0]
+for count in labels_count:
+	NUM_LABELS = count[0]
+MATRIX_SIZE = (NUM_USERS, NUM_LABELS)
 
 # apparel_list = ['Shirt', 'Pant', 'Watch', 'Shorts', 'Jacket']
 # df = pd.DataFrame(np.random.randint(0, 5, size = MATRIX_SIZE), columns=apparel_list, rows=list('ABCDE'))
@@ -76,7 +82,7 @@ def get_recommendations(user_id):
     # To avoid considering zeros as negative ratings
     df = df.replace(0, np.NaN)
     for i in range(NUM_USERS):
-        for j in range(NUM_APPAREL):
+        for j in range(NUM_LABELS):
             df.iloc[i,j] = calculate_sigmoid(df.iloc[i,j])*5
     # Normalize all values to be centered around 0
     df = df.sub(df.mean(axis=1), axis=0)
