@@ -1,7 +1,14 @@
 {% extends "base_layout.html" %}
 
+{% block head %}
+<link rel="stylesheet" href="/static/styles/recommendations.css">
+{% endblock %}
+
 {% block content %}
+<div class="container">
+	<h1>Recommendations</h1>
 	{% for path in recs: %}
-		<img style="width:200px;height:200px;" src="/static/dataset/{{path}}">
+	<img style="float: left; height: 400px; width: 31.5%;margin-right: 0.5%; margin-left: 0.5%; margin-bottom: 0.5em; border:3px solid coral " src="/static/dataset/{{path}}">
 	{% endfor %}
+</div>
 {% endblock %}

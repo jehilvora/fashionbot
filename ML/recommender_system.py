@@ -109,7 +109,7 @@ def get_recommendations(user_id):
     pref = sorted(pref, key=lambda x : x[1])
     pref = pref[-2:]
     print(pref)
-    recommendations = executeQuery("select img_path from apparel, has_labels where apparel_id = id and label_id in (%d, %d) order by RAND() limit 5" % (pref[0][1], pref[1][1]))
+    recommendations = executeQuery("select img_path from apparel, has_labels where apparel_id = id and label_id in (%d, %d) order by RAND() limit 6" % (pref[0][0], pref[1][0]))
     recommendations = ["/".join(x[0].split(os.path.sep)[-2:]) for x in recommendations]
     return recommendations
 
